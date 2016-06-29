@@ -20,7 +20,6 @@ end
 loop do
   print "Please input card number or 0 to quit: "
   card_number = gets.chomp
-  #card_number = "4929735477250543"
   break if card_number == '0'
   card_number = card_number.reverse.split(//)
   card_number = luhn_algorithm(card_number)
