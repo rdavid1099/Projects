@@ -1,16 +1,17 @@
 # Method to run card_number array through the alogrithm
 def luhn_algorithm(card_number)
-  calculated_number = []   # Empty array to dump the calculated numbers into
-  card_number.each.with_index do |num, index|
+  card_number.map.with_index do |num, index|
     num = num.to_i     # Converts element in array from a string to integer
     if index.even? || index == 0
-      calculated_number << num
+      num
     else
-      calculated_number << over_ten_split(num * 2) if (num * 2) >= 10  # Calls method to convert double digit numbers
-      calculated_number << (num * 2) if (num * 2) < 10
+      if (num * 2) >= 10
+        over_ten_split(num * 2)  # Calls method to convert double digit numbers
+      else
+        num * 2
+      end
     end
   end
-  return calculated_number
 end
 # Method to convert double digit numbers by adding the tens digit and ones digit together
 def over_ten_split(number)
