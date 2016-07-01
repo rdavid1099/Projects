@@ -2,7 +2,7 @@
 def luhn_algorithm(card_number)
   card_number.map.with_index do |num, index|
     num = num.to_i     # Converts element in array from a string to integer
-    if index.even? || index == 0
+    if index.even?
       num
     else
       if (num * 2) >= 10
@@ -15,7 +15,7 @@ def luhn_algorithm(card_number)
 end
 # Method to convert double digit numbers by adding the tens digit and ones digit together
 def over_ten_split(number)
-  return (1 + (number - 10))
+  return (number - 10).succ
 end
 
 loop do
