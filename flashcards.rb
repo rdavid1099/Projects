@@ -1,15 +1,19 @@
 require 'date'
 
 class Card
-  def initialize(question, answer)
+  def initialize(question, answer, hint)
     @question = question
     @answer = answer
+    @hint = hint
   end
   def question
     @question
   end
   def answer
     @answer
+  end
+  def hint
+    @hint
   end
 end
 
@@ -31,7 +35,7 @@ class CardGenerator
   end
   def cards
     cards_in_file = File.read(@file_name).split(/\n/)
-    cards_in_file.map {|card| Card.new(card.split(',')[0],card.split(',')[1])}
+    cards_in_file.map {|card| Card.new(card.split(';')[0],card.split(';')[1],card.split(';')[2])}
   end
 end
 
@@ -55,7 +59,6 @@ class Round
   def initialize(deck)
     @deck = deck
     @guesses = []
-    #@counter = 0
   end
   def start
     puts "\nLet's Play RyCARDS!  You're playing with #{@deck.cards.count} cards.\n-------------------------------------------------\n"
@@ -70,7 +73,6 @@ class Round
     @reshuffle_incorrect_cards = more_practice
   end
   def current_card
-    #return @deck.cards[@counter]
     return @deck.cards[0]
   end
   def previous_card
@@ -98,11 +100,14 @@ class Round
   def save_results
     results_filename = "#{Date.today.strftime('%Y-%m-%d')}-#{Time.now.hour.to_s}:#{Time.now.min.to_s}.txt"
     File.new(results_filename, 'w')
-    results = "On #{Date.today.strftime('%Y-%m-%d')} at #{Time.now.hour.to_s}:#{Time.now.min.to_s} user scored #{percent_correct}.  Below are the results.\n"
+    results = "On #{Date.today.strftime('%Y-%m-%d')} at #{Time.now.hour.to_s}:#{Time.now.min.to_s} user scored #{percent_correct}%.  Below are the results.\n"
     @guesses.each do |result|
       results += "-------------------------------------------------\nQuestion: #{result.card.question}\nAnswer: #{result.card.answer}\nUser Response: #{result.response}\nEvaluation: #{result.feedback}\n"
     end
     File.open(results_filename, "w") {|file| file.puts results}
+  end
+  def hint_to_current_question
+    return current_card.hint
   end
 end
 
