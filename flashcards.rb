@@ -55,6 +55,7 @@ class Round
   def initialize(deck)
     @deck = deck
     @guesses = []
+    #@counter = 0
   end
   def start
     puts "\nLet's Play RyCARDS!  You're playing with #{@deck.cards.count} cards.\n-------------------------------------------------\n"
@@ -69,20 +70,22 @@ class Round
     @reshuffle_incorrect_cards = more_practice
   end
   def current_card
-    return @deck.cards[guesses.count]
+    #return @deck.cards[@counter]
+    return @deck.cards[0]
   end
   def previous_card
-    return @deck.cards[guesses.count-1]
+    return @guesses[-1].card
   end
   def record_guess(user_guess)
     @guesses << Guess.new(user_guess, current_card)
     if @guesses[-1].correct? == false && @reshuffle_incorrect_cards == true # User didn't get question right and wants extra practice
-      card_to_be_reshuffled = previous_card
-      @deck.cards.delete(previous_card)
-      @deck.cards << card_to_be_reshuffled
+      @deck.cards.shuffle!
       puts "Card was reshuffled into the deck."
+  elsif @guesses[-1].correct? && @reshuffle_incorrect_cards == true
+      @deck.cards.delete(previous_card)
+    else
+      @deck.cards.shift
     end
-    @guesses[-1]
   end
   def number_correct
     correct = 0
